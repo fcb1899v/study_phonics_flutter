@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,11 @@ import 'dart:ui';
 import 'list.dart';
 import 'phonics.dart';
 import 'word.dart';
-import 'button.dart';
-
+import 'admob.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize();
   //向き指定
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,//縦固定
@@ -20,8 +21,9 @@ void main() {
 
 class MainApp extends StatelessWidget {
 
-  final purple = HexColor('8A2BE2'); //薄紫
+  final lightblue = Colors.lightBlue; //水色
   final pink = HexColor('FF69B4'); //薄ピンク
+  //final purple = HexColor('8A2BE2'); //薄紫
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class MainApp extends StatelessWidget {
       title: 'Study Phonics',
       theme: ThemeData(
         // This is the theme of your application.
-        primaryColor: purple,
+        primaryColor: lightblue,
         accentColor: pink, //薄ピンク
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -55,8 +57,9 @@ class _MainPageState extends State<MainPage> {
 
   // ignore: top_level_instance_method
   var phonicslist = PhonicsClass().phonicsDefault();
-  final lightblue = Colors.lightBlue;
-  final pink = HexColor('FF69B4');
+  final lightblue = Colors.lightBlue; //水色
+  final pink = HexColor('FF69B4'); //薄ピンク
+  final purple = HexColor('8A2BE2'); //薄紫
 
   FlutterTts fluttertts;
 
@@ -78,7 +81,10 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     int index = widget.index;
-    String word2 = PhonicsClass().phonicsWord(phonicslist[index])[4];
+    final char = phonicslist[index];
+    final word = PhonicsClass().phonicsWord(char);
+    final deflist = PhonicsClass().phonicsDefault();
+    String word2nd = word[4];
 
     return Scaffold(
       appBar: mainAppBar(),
@@ -86,6 +92,7 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            adMobWidget(),
             Spacer(flex: 3),
             alphabetChar(index),
             Spacer(flex:  3),
@@ -93,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                 children: <Widget>[
                   Spacer(flex: 10),
                   alphabetWordSet(index, 0),
-                  customSpacer(10, word2),
+                  customSpacer(10, word2nd),
                   alphabetWordSet(index, 1),
                   Spacer(flex: 10),
                 ]
@@ -104,11 +111,11 @@ class _MainPageState extends State<MainPage> {
                   Spacer(flex: 20),
                   returnButton(),
                   Spacer(flex: 20),
-                  shuffleButton(),
+                  customButton(phonicslist, "shuffle", Icons.shuffle),
                   Spacer(flex: 20),
-                  backButton(),
+                  customButton(phonicslist, "back", Icons.arrow_back),
                   Spacer(flex: 20),
-                  nextButton(),
+                  customButton(phonicslist, "next", Icons.arrow_forward),
                   Spacer(flex: 20),
                 ]
             ),
@@ -121,41 +128,38 @@ class _MainPageState extends State<MainPage> {
 
   Widget mainAppBar() {
     return AppBar(
-      leading: new IconButton(
-      icon: new Icon(Icons.arrow_back_ios,
-        color: Colors.white,
-      ),
-      onPressed: (){
-        Navigator.pop(context,true);
-      }),
-      title: Text('Study Phonix',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 25,
-        ),
-        textAlign: TextAlign.center,
-      ),
+      leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onPressed: (){
+            Navigator.pop(context,true);
+          }),
+      title: WordClass().AppBarTitle(),
       brightness: Brightness.dark,
+      centerTitle: true,
+    );
+  }
+
+  Widget adMobWidget() {
+    return AdmobBanner(
+      adUnitId: AdMobService().getBannerAdUnitId(),
+      adSize: AdmobBannerSize(
+        width: MediaQuery.of(context).size.width.toInt(),
+        height: AdMobService().getHeight(context).toInt(),
+        name: 'SMART_BANNER',
+      ),
     );
   }
 
   Widget alphabetChar(index) {
-    final Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
+    final charwidth = size.width - 20;
     //final sound = phonicslist[index];
     return RawMaterialButton(
-      constraints: BoxConstraints(
-        minWidth: size.width - 20,
-      ),
-      //onPressed: () {_speak(sound);},
-      child: Text(
-          phonicslist[index],
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 125,
-          )
-      ),
+      constraints: BoxConstraints(minWidth: charwidth,),
+      onPressed: () {},
+      child: WordClass().alphabetCharText(phonicslist, index),
     );
   }
 
@@ -174,8 +178,9 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget alphabetWord(index, num){
-    final word = PhonicsClass().phonicsWord(phonicslist[index]);
-    final sound = word[3 * num] + word[3 * num + 1] + word[3 * num + 2];
+    final char = phonicslist[index];
+    final word = PhonicsClass().phonicsWord(char);
+    final sound = WordClass().wordSound(word, num);
     if (word[3 * num + 1] == "") {
       return SizedBox.shrink();
     } else {
@@ -187,53 +192,53 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget alphabetPicture(index, num) {
-    final Size size = MediaQuery.of(context).size;
-    final picture = PhonicsClass().phonicsPicture(phonicslist[index])[num];
-    final word = PhonicsClass().phonicsWord(phonicslist[index]);
-    final sound = word[3 * num] + word[3 * num + 1] + word[3 * num + 2];
+    final size = MediaQuery.of(context).size;
+    final picwidth = size.width / 2 - 30;
+    final char = phonicslist[index];
+    final picture = PhonicsClass().phonicsPicture(char)[num];
+    final word = PhonicsClass().phonicsWord(char);
+    final sound = WordClass().wordSound(word, num);
     if (picture == "") {
       return SizedBox.shrink();
     } else {
       return TextButton(
           onPressed: () {_speak(sound);},
           child: ConstrainedBox(
-            constraints: BoxConstraints.loose(Size(size.width / 2 - 30, 120)),
-            child: Image.asset(picture, width: size.width / 2 - 30, height: 120),
+            constraints: BoxConstraints.loose(Size(picwidth, 120)),
+            child: Image.asset(picture, width: picwidth, height: 120),
           )
       );
     }
   }
 
   Widget alphabetWordSound(index, num) {
-    final Size size = MediaQuery.of(context).size;
-    final list = phonicslist[index];
-    final word = PhonicsClass().phonicsWord(list);
-    final sound = word[3 * num] + word[3 * num + 1] + word[3 * num + 2];
+    final size = MediaQuery.of(context).size;
+    final buttonwidth = size.width / 2 - 30;
+    final char = phonicslist[index];
+    final word = PhonicsClass().phonicsWord(char);
+    final sound = WordClass().wordSound(word, num);
     if (sound == "") {
       return SizedBox.shrink();
     } else {
       return RawMaterialButton(
         constraints: BoxConstraints(
-          minWidth: size.width / 2 - 30,
+          minWidth: buttonwidth,
           minHeight: 50,
         ),
         onPressed: (){_speak(sound);},
         fillColor: lightblue,
-        child: Icon(
-          Icons.audiotrack,
-          color: Colors.white,
-          size: 30.0,
-        ),
+        child: WordClass().buttonIcon(Icons.audiotrack),
         shape: const StadiumBorder(),
       );
     }
   }
 
   Widget returnButton(){
-    final Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
+    final buttonwidth = size.width / 4 - 30;
     return RawMaterialButton(
       constraints: BoxConstraints(
-        minWidth: size.width / 4 - 30,
+        minWidth: buttonwidth,
         minHeight: 50,
       ),
       onPressed: (){
@@ -242,98 +247,26 @@ class _MainPageState extends State<MainPage> {
         });
       },
       fillColor: pink,
-      child: Icon(
-        Icons.keyboard_return,
-        color: Colors.white,
-        size: 30.0,
-      ),
+      child: WordClass().buttonIcon(Icons.keyboard_return),
       shape: const StadiumBorder(),
     );
   }
 
-  Widget shuffleButton(){
-    final Size size = MediaQuery.of(context).size;
+  Widget customButton(charlist, command, icon){
+    final size = MediaQuery.of(context).size;
+    final buttonwidth = size.width / 4 - 30;
     return RawMaterialButton(
       constraints: BoxConstraints(
-        minWidth: size.width / 4 - 30,
+        minWidth: buttonwidth,
         minHeight: 50,
       ),
       onPressed: (){
-        setState(() {phonicslist.shuffle();});
-      },
-      fillColor: pink,
-      child: Icon(
-        Icons.shuffle,
-        color: Colors.white,
-        size: 30.0,
-      ),
-      shape: const StadiumBorder(),
-    );
-  }
-
-  Widget backButton(){
-    final Size size = MediaQuery.of(context).size;
-    final listlength = phonicslist.length;
-    return RawMaterialButton(
-      constraints: BoxConstraints(
-        minWidth: size.width / 4 - 30,
-        minHeight: 50,
-      ),
-      onPressed: (){
-        var phonixlast = phonicslist[listlength - 1];
         setState(() {
-          phonicslist.insert(0, phonixlast);
-          phonicslist.removeAt(listlength);
+          WordClass().changeState(charlist, command);
         });
       },
       fillColor: pink,
-      child: Icon(
-        Icons.arrow_back,
-        color: Colors.white,
-        size: 30.0,
-      ),
-      shape: const StadiumBorder(),
-    );
-  }
-
-  Widget nextButton(){
-    final Size size = MediaQuery.of(context).size;
-    final listlength = phonicslist.length;
-    return RawMaterialButton(
-      constraints: BoxConstraints(
-        minWidth: size.width / 4 - 30,
-        minHeight: 50,
-      ),
-      onPressed: (){
-        var phonixfirst = phonicslist[0];
-        setState(() {
-          phonicslist.insert(listlength, phonixfirst);
-          phonicslist.removeAt(0);
-        });
-      },
-      fillColor: pink,
-      child: Icon(
-        Icons.arrow_forward,
-        color: Colors.white,
-        size: 30.0,
-      ),
-      shape: const StadiumBorder(),
-    );
-  }
-
-  Widget customButton(BuildContext context, icon, command){
-    final Size size = MediaQuery.of(context).size;
-    return RawMaterialButton(
-      constraints: BoxConstraints(
-        minWidth: size.width / 4 - 30,
-        minHeight: 50,
-      ),
-      onPressed: (){setState(() {ButtonClass().changeState(command);});},
-      fillColor: pink,
-      child: Icon(icon,
-        color: Colors.white,
-        size: 30.0,
-      ),
+      child: WordClass().buttonIcon(icon),
       shape: const StadiumBorder(),
     );
   }

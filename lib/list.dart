@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'phonics.dart';
+import 'word.dart';
 
 class ListPage extends StatefulWidget {
   ListPage({Key key}) : super(key: key);
@@ -12,6 +13,9 @@ class ListPageState extends State<ListPage> {
 
   // ignore: top_level_instance_method
   final phonicslist = PhonicsClass().phonicsDefault();
+  final lightblue = Colors.lightBlue;
+  final pink = HexColor('FF69B4'); //薄ピンク
+  final purple = HexColor('8A2BE2'); //薄紫
 
   @override
   Widget build(BuildContext context) {
@@ -36,23 +40,15 @@ class ListPageState extends State<ListPage> {
   }
 
   Widget listAppBar() {
-    final purple = HexColor('8A2BE2'); //薄紫
     return AppBar(
-      title: Text("Study Phonics",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 25,
-        ),
-        textAlign: TextAlign.center,
-      ),
+      title: WordClass().AppBarTitle(),
       brightness: Brightness.dark,
-      backgroundColor: purple,
+      backgroundColor: pink,
+      centerTitle: true,
     );
   }
 
   Widget gridWordList(index) {
-    final lightblue = Colors.lightBlue;
     return Container(
       padding: const EdgeInsets.all(8.0),
       alignment: Alignment.center,
