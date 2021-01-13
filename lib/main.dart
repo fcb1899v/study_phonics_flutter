@@ -11,7 +11,7 @@ import 'admob.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize();
+  //Admob.initialize();
   //向き指定
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,//縦固定
@@ -92,7 +92,7 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            adMobWidget(),
+            //adMobWidget(),
             Spacer(flex: 3),
             alphabetChar(index),
             Spacer(flex:  3),
