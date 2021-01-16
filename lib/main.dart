@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,9 @@ import 'dart:ui';
 import 'list.dart';
 import 'phonics.dart';
 import 'word.dart';
-import 'admob.dart';
+//import 'admob.dart';
+//import 'package:admob_flutter/admob_flutter.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Study Phonics',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         primaryColor: lightblue,
@@ -83,7 +85,6 @@ class _MainPageState extends State<MainPage> {
     int index = widget.index;
     final char = phonicslist[index];
     final word = PhonicsClass().phonicsWord(char);
-    final deflist = PhonicsClass().phonicsDefault();
     String word2nd = word[4];
 
     return Scaffold(
@@ -141,16 +142,16 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget adMobWidget() {
-    return AdmobBanner(
-      adUnitId: AdMobService().getBannerAdUnitId(),
-      adSize: AdmobBannerSize(
-        width: MediaQuery.of(context).size.width.toInt(),
-        height: AdMobService().getHeight(context).toInt(),
-        name: 'SMART_BANNER',
-      ),
-    );
-  }
+  // Widget adMobWidget() {
+  //   return AdmobBanner(
+  //     adUnitId: AdMobService().getBannerAdUnitId(),
+  //     adSize: AdmobBannerSize(
+  //       width: MediaQuery.of(context).size.width.toInt(),
+  //       height: AdMobService().getHeight(context).toInt(),
+  //       name: 'SMART_BANNER',
+  //     ),
+  //   );
+  // }
 
   Widget alphabetChar(index) {
     final size = MediaQuery.of(context).size;

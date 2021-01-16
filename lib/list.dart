@@ -20,6 +20,7 @@ class ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: listAppBar(),
         body: listMain(),
