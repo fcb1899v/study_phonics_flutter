@@ -6,13 +6,12 @@ import 'dart:ui';
 import 'list.dart';
 import 'phonics.dart';
 import 'word.dart';
-//import 'admob.dart';
-//import 'package:admob_flutter/admob_flutter.dart';
-
+import 'admob.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //Admob.initialize();
+  Admob.initialize();
   //向き指定
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,//縦固定
@@ -24,7 +23,6 @@ class MainApp extends StatelessWidget {
 
   final lightblue = Colors.lightBlue; //水色
   final pink = HexColor('FF69B4'); //薄ピンク
-  //final purple = HexColor('8A2BE2'); //薄紫
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +59,6 @@ class _MainPageState extends State<MainPage> {
   var phonicslist = PhonicsClass().phonicsDefault();
   final lightblue = Colors.lightBlue; //水色
   final pink = HexColor('FF69B4'); //薄ピンク
-  final purple = HexColor('8A2BE2'); //薄紫
 
   FlutterTts fluttertts;
 
@@ -93,7 +90,7 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //adMobWidget(),
+            adMobWidget(),
             Spacer(flex: 3),
             alphabetChar(index),
             Spacer(flex:  3),
@@ -142,16 +139,16 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  // Widget adMobWidget() {
-  //   return AdmobBanner(
-  //     adUnitId: AdMobService().getBannerAdUnitId(),
-  //     adSize: AdmobBannerSize(
-  //       width: MediaQuery.of(context).size.width.toInt(),
-  //       height: AdMobService().getHeight(context).toInt(),
-  //       name: 'SMART_BANNER',
-  //     ),
-  //   );
-  // }
+  Widget adMobWidget() {
+    return AdmobBanner(
+      adUnitId: AdMobService().getBannerAdUnitId(),
+      adSize: AdmobBannerSize(
+        width: MediaQuery.of(context).size.width.toInt(),
+        height: AdMobService().getHeight(context).toInt(),
+        name: 'SMART_BANNER',
+      ),
+    );
+  }
 
   Widget alphabetChar(index) {
     final size = MediaQuery.of(context).size;

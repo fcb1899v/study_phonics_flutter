@@ -27,7 +27,7 @@ class WordClass {
   }
 
   Widget AppBarTitle(){
-    return Text('Study Phonix',
+    return Text('Study Phonics',
       style: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
