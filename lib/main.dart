@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:ui';
+import 'dart:io';
 import 'list.dart';
 import 'phonics.dart';
 import 'word.dart';
@@ -90,7 +91,7 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            adMobWidget(),
+            if (!Platform.isIOS) adMobWidget(),
             Spacer(flex: 3),
             alphabetChar(index),
             Spacer(flex:  3),
@@ -142,11 +143,7 @@ class _MainPageState extends State<MainPage> {
   Widget adMobWidget() {
     return AdmobBanner(
       adUnitId: AdMobService().getBannerAdUnitId(),
-      adSize: AdmobBannerSize(
-        width: MediaQuery.of(context).size.width.toInt(),
-        height: AdMobService().getHeight(context).toInt(),
-        name: 'SMART_BANNER',
-      ),
+      adSize: AdmobBannerSize.SMART_BANNER(context),
     );
   }
 

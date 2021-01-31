@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'phonics.dart';
 
 class WordClass {
 
@@ -26,6 +25,7 @@ class WordClass {
     }
   }
 
+  // ignore: non_constant_identifier_names
   Widget AppBarTitle(){
     return Text('Study Phonics',
       style: TextStyle(
