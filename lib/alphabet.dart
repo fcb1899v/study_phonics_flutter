@@ -43,7 +43,7 @@ class AlphabetClass {
       case "x": return ["", "x", "ylophone", "fo", "x", ""];          //[クス]
       case "y": return ["", "y", "ogurt", "", "y", "acht"];           //[ィヤ] //1
       case "z": return ["", "z", "ebra", "", "z", "ero"];         //[ズ] //1
-      default: return ["", ""];
+      default: return ["","","", "","",""];
     }
   }
 
