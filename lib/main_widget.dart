@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'extension.dart';
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
@@ -11,6 +10,27 @@ class HexColor extends Color {
     return int.parse(hexColor, radix: 16);
   }
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
+
+extension ListStringExt on List<String> {
+
+  List<String> wordSound() {
+    return [
+      "${this[0]}${this[1]}${this[2]}",
+      "${this[3]}${this[4]}${this[5]}"
+    ];
+  }
+}
+
+extension DoubleExt on double {
+
+  double picWidth() {
+    return (this < 620) ? this / 2 - 60: 250;
+  }
+
+  double picHeight() {
+    return (this < 620) ? this / 2 - 60: 250;
+  }
 }
 
 Widget appBarTitle() {

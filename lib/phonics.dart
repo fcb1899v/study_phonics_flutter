@@ -1,6 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+
 extension StringExt on String {
 
-  List<String> phonicsWord() {
+  Future<void> speakText(BuildContext context) async {
+    FlutterTts flutterTts = FlutterTts();
+    flutterTts.setLanguage('en-Us');
+    //flutterTts.setSpeechRate(0.5);
+    await flutterTts.stop();
+    await flutterTts.speak(this);
+  }
+
+    List<String> phonicsWord() {
     switch (this) { //:6
       case "a": return ["", "a", "pple", "", "a", "nt"];              //[ア]と[エ]の中間
       case "a'": return ["", "a", "corn", "", "a", "ngelfish"];       //[エイ]

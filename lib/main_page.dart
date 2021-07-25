@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'main_widget.dart';
 import 'phonics.dart';
-import 'extension.dart';
 import 'admob.dart';
 
 class MainPage extends StatefulWidget {
@@ -83,11 +82,11 @@ class _MainPageState extends State<MainPage> {
           Spacer(),
           returnButton(),
           Spacer(),
-          customButton(phonicsList, "shuffle", Icons.shuffle),
+          shuffleButton(phonicsList),
           Spacer(),
-          customButton(phonicsList, "back", Icons.arrow_back),
+          backButton(phonicsList),
           Spacer(),
-          customButton(phonicsList, "next", Icons.arrow_forward),
+          forwardButton(phonicsList),
           Spacer(),
         ]
       ),
@@ -169,18 +168,53 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget customButton(List<String> charList, String command, IconData icon){
+  Widget shuffleButton(List<String> charList){
     return ElevatedButton(
       onPressed: (){
         setState(() {
-          charList.changeState(command);
+          phonicsList.shuffle();
+          print("${phonicsList[index]}");
           word = phonicsList[index].phonicsWord();
           picture = phonicsList[index].phonicsPicture();
           sound = word.wordSound();
         });
       },
       style: elevatedButtonStyle(HexColor('FF69B4'), 20),
-      child: customIcon(context, icon),
+      child: customIcon(context, Icons.shuffle),
+    );
+  }
+
+  Widget backButton(List<String> charList){
+    return ElevatedButton(
+      onPressed: (){
+        setState(() {
+          phonicsList.insert(0, phonicsList[phonicsList.length - 1]);
+          phonicsList.removeAt(phonicsList.length - 1);
+          print("${phonicsList[index]}");
+          word = phonicsList[index].phonicsWord();
+          picture = phonicsList[index].phonicsPicture();
+          sound = word.wordSound();
+        });
+      },
+      style: elevatedButtonStyle(HexColor('FF69B4'), 20),
+      child: customIcon(context, Icons.arrow_back),
+    );
+  }
+
+  Widget forwardButton(List<String> charList){
+    return ElevatedButton(
+      onPressed: (){
+        setState(() {
+          phonicsList.insert(phonicsList.length, phonicsList[0]);
+          phonicsList.removeAt(0);
+          print("${phonicsList[index]}");
+          word = phonicsList[index].phonicsWord();
+          picture = phonicsList[index].phonicsPicture();
+          sound = word.wordSound();
+        });
+      },
+      style: elevatedButtonStyle(HexColor('FF69B4'), 20),
+      child: customIcon(context, Icons.arrow_forward),
     );
   }
 }
