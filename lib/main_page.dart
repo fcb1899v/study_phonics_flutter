@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'main_widget.dart';
 import 'phonics.dart';
-import 'admob.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage(this.index);
@@ -28,11 +27,10 @@ class _MainPageState extends State<MainPage> {
         "a", "a'", "b", "c", "c'", "d", "e", "f", "g", "g'", "h",
         "i", "i'", "j", "k", "l", "m", "n", "o", "p", "q", "r",
         "s", "s'", "t", "u", "v", "w", "x", "y", "z",
-        "er", "ir", "or", "ur", "ear'", "ie", "igh", "-y", "_i_e", "ou", "ow",
-        "ēē", "ēā", "īē", "ey", "_e_e", "eer", "ear",
-        "ue", "ui", "ew", "ōō", "ōū", "_u_e", "oo",
-        "ai", "ay", "_a_e", "air", "ea",
-        "au", "aw", "our", "oy", "oa", "ōw", "all",
+        "er", "ir", "or", "ur", "ear'", "ie", "igh", "-y", "_i_e",
+        "ou", "ow", "ēē", "ēā", "īē", "ey", "_e_e", "eer", "ear",
+        "ue", "ui", "ew", "ōō", "ōū", "_u_e", "oo", "ai", "ay", "_a_e",
+        "air", "ea", "au", "aw", "our", "oy", "oa", "ōw", "all",
         "ph", "ch", "sh", "th", "th'", "wh", "ck", "ng", "lly"
       ];
       word = phonicsList[index].phonicsWord();
@@ -65,8 +63,6 @@ class _MainPageState extends State<MainPage> {
             Spacer(),
             operationButtons(),
             Spacer(),
-            Spacer(),
-            adMobWidget(context),
             Spacer(),
           ],
         ),
@@ -152,11 +148,10 @@ class _MainPageState extends State<MainPage> {
           "a", "a'", "b", "c", "c'", "d", "e", "f", "g", "g'", "h",
           "i", "i'", "j", "k", "l", "m", "n", "o", "p", "q", "r",
           "s", "s'", "t", "u", "v", "w", "x", "y", "z",
-          "er", "ir", "or", "ur", "ear'", "ie", "igh", "-y", "_i_e", "ou", "ow",
-          "ēē", "ēā", "īē", "ey", "_e_e", "eer", "ear",
-          "ue", "ui", "ew", "ōō", "ōū", "_u_e", "oo",
-          "ai", "ay", "_a_e", "air", "ea",
-          "au", "aw", "our", "oy", "oa", "ōw", "all",
+          "er", "ir", "or", "ur", "ear'", "ie", "igh", "-y", "_i_e",
+          "ou", "ow", "ēē", "ēā", "īē", "ey", "_e_e", "eer", "ear",
+          "ue", "ui", "ew", "ōō", "ōū", "_u_e", "oo", "ai", "ay", "_a_e",
+          "air", "ea", "au", "aw", "our", "oy", "oa", "ōw", "all",
           "ph", "ch", "sh", "th", "th'", "wh", "ck", "ng", "lly"
         ];
         word = phonicsList[index].phonicsWord();
