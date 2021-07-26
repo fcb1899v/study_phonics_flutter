@@ -30,9 +30,10 @@ class _MainPageState extends State<MainPage> {
         "er", "ir", "or", "ur", "ear'", "ie", "igh", "-y", "_i_e",
         "ou", "ow", "ēē", "ēā", "īē", "ey", "_e_e", "eer", "ear",
         "ue", "ui", "ew", "ōō", "ōū", "_u_e", "oo", "ai", "ay", "_a_e",
-        "air", "ea", "au", "aw", "our", "oy", "oa", "ōw", "all",
+        "air", "ea", "au", "aw", "our", "oy", "oa", "ōw", "_o_e", "all",
         "ph", "ch", "sh", "th", "th'", "wh", "ck", "ng", "lly"
       ];
+      print("${phonicsList[index]}, ${phonicsList[index].phonicsWord()}");
       word = phonicsList[index].phonicsWord();
       picture = phonicsList[index].phonicsPicture();
       sound = word.wordSound();
@@ -151,7 +152,7 @@ class _MainPageState extends State<MainPage> {
           "er", "ir", "or", "ur", "ear'", "ie", "igh", "-y", "_i_e",
           "ou", "ow", "ēē", "ēā", "īē", "ey", "_e_e", "eer", "ear",
           "ue", "ui", "ew", "ōō", "ōū", "_u_e", "oo", "ai", "ay", "_a_e",
-          "air", "ea", "au", "aw", "our", "oy", "oa", "ōw", "all",
+          "air", "ea", "au", "aw", "our", "oy", "oa", "ōw", "_o_e", "all",
           "ph", "ch", "sh", "th", "th'", "wh", "ck", "ng", "lly"
         ];
         word = phonicsList[index].phonicsWord();
@@ -168,7 +169,7 @@ class _MainPageState extends State<MainPage> {
       onPressed: (){
         setState(() {
           phonicsList.shuffle();
-          print("${phonicsList[index]}");
+          print("${phonicsList[index]}, ${phonicsList[index].phonicsWord()}");
           word = phonicsList[index].phonicsWord();
           picture = phonicsList[index].phonicsPicture();
           sound = word.wordSound();
@@ -185,7 +186,7 @@ class _MainPageState extends State<MainPage> {
         setState(() {
           phonicsList.insert(0, phonicsList[phonicsList.length - 1]);
           phonicsList.removeAt(phonicsList.length - 1);
-          print("${phonicsList[index]}");
+          print("${phonicsList[index]}, ${phonicsList[index].phonicsWord()}");
           word = phonicsList[index].phonicsWord();
           picture = phonicsList[index].phonicsPicture();
           sound = word.wordSound();
@@ -202,7 +203,7 @@ class _MainPageState extends State<MainPage> {
         setState(() {
           phonicsList.insert(phonicsList.length, phonicsList[0]);
           phonicsList.removeAt(0);
-          print("${phonicsList[index]}");
+          print("${phonicsList[index]}, ${phonicsList[index].phonicsWord()}");
           word = phonicsList[index].phonicsWord();
           picture = phonicsList[index].phonicsPicture();
           sound = word.wordSound();
