@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "366672570993",
+    "project_id": "studyphonics-app",
+    "storage_bucket": "studyphonics-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366672570993:android:11db5e538f7e7d702b49d0",
+        "android_client_info": {
+          "package_name": "com.nakajimamasao.studyphonics"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7DRIe26Ix8JF8hSV8nnAW3rkH8c8Bw9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      },
+      "admob_app_id": "ca-app-pub-1585283309075901~9894151798"
+    }
+  ],
+  "configuration_version": "1"
+}
