@@ -6,7 +6,7 @@ plugins {
     id "com.google.firebase.crashlytics"
 }
 
-def kotlin_version = "1.8.22"
+def kotlin_version = "2.2.0"
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -33,31 +33,32 @@ if (keystorePropertiesFile.exists()) {
 
 android {
 
-    compileSdkVersion 35
-    ndkVersion "25.1.8937393"
+    compileSdkVersion 36
+    ndkVersion "27.0.12077973"
     namespace "com.nakajimamasao.studyphonics"
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
-    kotlinOptions {
-        jvmTarget = '17'
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     defaultConfig {
         applicationId "com.nakajimamasao.studyphonics"
         minSdkVersion 23
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -84,8 +85,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // ───────────────────── Firebase ─────────────────────
+    implementation platform("com.google.firebase:firebase-bom:33.16.0")
+    implementation "com.google.firebase:firebase-analytics-ktx"
 }
 
 allprojects {

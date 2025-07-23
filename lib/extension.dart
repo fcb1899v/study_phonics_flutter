@@ -5,9 +5,26 @@ import 'constant.dart';
 
 extension ContextExt on BuildContext {
 
-  ///Common
+  // --- Navigation & UI Basics ---
+  // Core navigation and UI utility methods for screen management and responsive design
+  void pushFadeReplacement(Widget page) {
+    Navigator.pushAndRemoveUntil(this, PageRouteBuilder(
+      pageBuilder: (_, animation, __) => page,
+      transitionsBuilder: (_, animation, __, child) => FadeTransition(
+        opacity: animation,
+        child: child,
+      ),
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    (route) => false);
+  }
+  void popPage() => Navigator.pop(this);
   double width() => MediaQuery.of(this).size.width;
   double height() => MediaQuery.of(this).size.height;
+
+  // --- Localization & Fonts ---
+  // Language detection and font selection based on current locale
+  String lang() => Localizations.localeOf(this).languageCode;
 
   ///Size
   double appBarHeight() => (width() < 600) ? width() * 0.15: 90;
@@ -36,12 +53,6 @@ extension StringExt on String {
 
   void debugPrint() {
     if (kDebugMode) print(this);
-  }
-
-  //this is sound[num]
-  Future<void> speakText(BuildContext context, FlutterTts flutterTts) async {
-    await flutterTts.speak(this);
-    this.debugPrint();
   }
 
   //char sound
