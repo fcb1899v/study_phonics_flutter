@@ -4,35 +4,55 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'constant.dart';
 
 extension ContextExt on BuildContext {
-  ///Common
+
+  // --- Navigation & UI Basics ---
+  // Core navigation and UI utility methods for screen management and responsive design
+  void pushFadeReplacement(Widget page) {
+    Navigator.pushAndRemoveUntil(this, PageRouteBuilder(
+      pageBuilder: (_, animation, __) => page,
+      transitionsBuilder: (_, animation, __, child) => FadeTransition(
+        opacity: animation,
+        child: child,
+      ),
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    (route) => false);
+  }
+  void popPage() => Navigator.pop(this);
   double width() => MediaQuery.of(this).size.width;
   double height() => MediaQuery.of(this).size.height;
+
+  // --- Localization & Fonts ---
+  // Language detection and font selection based on current locale
   String lang() => Localizations.localeOf(this).languageCode;
 
   ///Size
-  double appBarHeight() => (width() < 600) ? width() * appBarHeightRate: appBarMaxHeight;
-  double picWidth() => (width() < 600) ? width() / 2 - 60: picMaxWidth;
-  double picHeight() => (width() < 600) ? width() / 2 - 60: picMaxWidth;
-  double charWidth(String char) => width() * ((char.length == 1) ? wordWidthRate: wordWideWidthRate);
-
-  ///List
-  int listRowNumber() => width() ~/ 100 + 1;
+  double appBarHeight() => (width() < 600) ? width() * 0.15: 90;
+  double sideMargin() => height() * 0.005;
+  double picSize() => height() * 0.18;
+  double charWidth(String char) => picSize() * ((char.length == 1) ? 1: 2);
+  double charHeight() => height() * 0.2;
+  double charSize() => height() * 0.15;
+  double wordSize() => height() * 0.025;
+  double wordSpace() => height() * 0.04;
+  double buttonWidth() => height() * 0.08;
+  double buttonMargin() => height() * 0.02;
+  double buttonIconSize() => height() * 0.03;
+  double buttonHeight() => height() * 0.05;
+  double buttonRadius() => height() * 0.03;
 
   ///Admob
   double admobHeight() => (height() < 600) ? 50: (height() < 1000) ? 50 + (height() - 600) / 8: 100;
-  double admobWidth() => width() - 100;
+  double admobWidth() => width();
+
+  ///List
+  int listRowNumber() => width() ~/ 100 + 1;
 }
 
 extension StringExt on String {
 
   void debugPrint() {
     if (kDebugMode) print(this);
-  }
-
-  //this is sound[num]
-  Future<void> speakText(BuildContext context, FlutterTts flutterTts) async {
-    await flutterTts.speak(this);
-    this.debugPrint();
   }
 
   //char sound
@@ -259,7 +279,13 @@ extension IntExt on int {
 
   int backNumber() => (this == 0) ? allPhonics.length - 1: this - 1;
   int nextNumber() => (this == allPhonics.length - 1) ? 0: this + 1;
+  int getCounterValue(int i, int defaultValue) {
+    final int counter = (i == 2) ? backNumber(): (i == 3) ? nextNumber(): defaultValue;
+    "Counter: ${counter}".debugPrint();
+    return counter;
+  }
 }
+
 
 extension ListStringExt on List<String> {
 
@@ -267,6 +293,14 @@ extension ListStringExt on List<String> {
     "${this[0]}${this[1]}${this[2]}",
     "${this[3]}${this[4]}${this[5]}"
   ];
+
+  List<String> getPhonicsListValue(int i) {
+    final List<String> list = List<String>.from(allPhonics);
+    if (i == 1) list.shuffle();
+    final List<String> phonicsList = (i == 0) ? allPhonics: (i == 1) ? list: this;
+    if (i == 0 || i == 1) "PhonicsList: $phonicsList".debugPrint();
+    return phonicsList;
+  }
 
   String printWord() =>
       "${wordSound()[0]}, ${wordSound()[1]}";
