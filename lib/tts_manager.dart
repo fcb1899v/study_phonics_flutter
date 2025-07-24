@@ -2,15 +2,6 @@
 /// 
 /// Manages text-to-speech functionality for the phonics learning app.
 /// Handles voice selection, speech synthesis, and platform-specific configurations.
-/// 
-/// Features:
-/// - Multi-language TTS support
-/// - Platform-specific voice selection (iOS/Android)
-/// - Audio session management
-/// - Speech rate and volume control
-/// 
-/// Author: Nakajima Masao
-/// Version: 1.5.3
 
 import 'dart:io';
 import 'package:flutter/material.dart';

@@ -1,3 +1,8 @@
+/// Study Phonics App - Extensions
+/// 
+/// Provides extension methods for BuildContext and String classes.
+/// Includes responsive UI utilities, navigation helpers, and phonics functionality.
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';

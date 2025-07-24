@@ -2,9 +2,6 @@
 /// 
 /// Interactive phonics learning app with Firebase Analytics, AdMob integration,
 /// and Text-to-Speech functionality. Supports iOS and Android platforms.
-/// 
-/// Author: Nakajima Masao
-/// Version: 1.5.3
 
 import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
@@ -29,20 +26,21 @@ Future<void> main() async {
   // Load environment variables from .env file
   await dotenv.load(fileName: "assets/.env");
   // Initialize Firebase with platform-specific options
-  await Firebase.initializeApp(
-    name: "Study Phonics",
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp(
+      name: "Study Phonics",
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    MobileAds.instance.initialize();
+  }
   // Start the app with Riverpod provider scope
   runApp(const ProviderScope(child: MyApp()));
-  // Initialize AdMob only on Android platform
-  if (Platform.isAndroid) MobileAds.instance.initialize();
 }
 
 /// Root widget of the application
 /// Configures MaterialApp with theme, navigation observers, and platform features
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

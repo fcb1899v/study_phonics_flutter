@@ -1,75 +1,94 @@
+/// Study Phonics App - AdMob Banner Widget
+/// 
+/// Displays banner advertisements using Google AdMob SDK.
+/// Only works on Android platform, returns empty widget on iOS.
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'extension.dart';
 
-/// AdMobバナー広告を管理するクラス
-class AdMobBanner extends StatefulWidget {
-  const AdMobBanner({Key? key}) : super(key: key);
+// Import AdMob only for Android
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-  @override
-  State<AdMobBanner> createState() => _AdMobBannerState();
-}
-
-class _AdMobBannerState extends State<AdMobBanner> {
-  BannerAd? _bannerAd;
-  bool _isLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAd();
-  }
-
-  /// バナー広告を読み込む
-  void _loadAd() {
-    _bannerAd = BannerAd(
-      adUnitId: _getBannerAdUnitId(),
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _isLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-        },
-      ),
-    );
-
-    _bannerAd!.load();
-  }
-
-  /// プラットフォームに応じたバナー広告ユニットIDを取得
-  String _getBannerAdUnitId() {
-    if (Platform.isAndroid) {
-      return dotenv.env['ANDROID_BANNER_UNIT_ID'] ?? 
-             'ca-app-pub-3940256099942544/6300978111'; // テスト用ID
-    } else if (Platform.isIOS) {
-      return dotenv.env['IOS_BANNER_UNIT_ID'] ?? 
-             'ca-app-pub-3940256099942544/2934735716'; // テスト用ID
-    }
-    return 'ca-app-pub-3940256099942544/6300978111'; // デフォルト
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
-  }
+/// AdMob Banner Widget
+/// Displays banner advertisements with platform-specific handling
+class AdBannerWidget extends HookWidget {
+  const AdBannerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (!_isLoaded || _bannerAd == null) {
-      return const SizedBox.shrink();
+    final adLoaded = useState(false);
+    final adFailedLoading = useState(false);
+    final bannerAd = useState<BannerAd?>(null);
+    // final testIdentifiers = ['2793ca2a-5956-45a2-96c0-16fafddc1a15'];
+
+    /// Get banner ad unit ID from environment variables
+    String bannerUnitId() => dotenv.get(
+      kDebugMode ? 'ANDROID_BANNER_UNIT_ID':
+      'ANDROID_BANNER_TEST_ID'
+    );
+
+    /// Load banner advertisement
+    Future<void> loadAdBanner() async {
+      final adBanner = BannerAd(
+        adUnitId: bannerUnitId(),
+        size: AdSize.largeBanner,
+        request: const AdRequest(),
+        listener: BannerAdListener(
+          onAdLoaded: (Ad ad) {
+            'Ad: $ad loaded.'.debugPrint();
+            adLoaded.value = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            ad.dispose();
+            'Ad: $ad failed to load: $error'.debugPrint();
+            adFailedLoading.value = true;
+            Future.delayed(const Duration(seconds: 30), () {
+              if (!adLoaded.value && !adFailedLoading.value) loadAdBanner();
+            });
+          },
+        ),
+      );
+      adBanner.load();
+      bannerAd.value = adBanner;
     }
 
-    return Container(
-      width: _bannerAd!.size.width.toDouble(),
-      height: _bannerAd!.size.height.toDouble(),
-      child: AdWidget(ad: _bannerAd!),
+    /// Initialize ad loading when widget is created
+    useEffect(() {
+      ConsentInformation.instance.requestConsentInfoUpdate(ConsentRequestParameters(
+        // consentDebugSettings: ConsentDebugSettings(
+        //   debugGeography: DebugGeography.debugGeographyEea,
+        //   testIdentifiers: testIdentifiers,
+        // ),
+      ), () async {
+        if (await ConsentInformation.instance.isConsentFormAvailable()) {
+          ConsentForm.loadConsentForm((ConsentForm consentForm) async {
+            var status = await ConsentInformation.instance.getConsentStatus();
+            "status: $status".debugPrint();
+            if (status == ConsentStatus.required) {
+              consentForm.show((formError) async => await loadAdBanner());
+            } else {
+              await loadAdBanner();
+            }
+          }, (formError) {
+            "formError: $formError".debugPrint();
+          });
+        } else {
+          await loadAdBanner();
+        }
+      }, (FormError error) {
+        "error: ${error.message}: $error".debugPrint();
+      });
+      "bannerAd: ${bannerAd.value}".debugPrint();
+      return () => bannerAd.value?.dispose();
+    }, []);
+
+    return SizedBox(
+      width: context.admobWidth(),
+      height: context.admobHeight(),
+      child: (adLoaded.value) ? AdWidget(ad: bannerAd.value!): null,
     );
   }
-} 
+}

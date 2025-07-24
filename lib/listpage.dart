@@ -9,8 +9,6 @@
 /// - Navigation to individual phonics lessons
 /// - Custom styling with shadows and colors
 /// 
-/// Author: Nakajima Masao
-/// Version: 1.5.3
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

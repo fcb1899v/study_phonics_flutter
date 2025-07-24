@@ -16,7 +16,7 @@ dependencies:
   # Firebase Analytics
   firebase_core: ^3.15.2
   firebase_analytics: ^11.6.0
-  # Admob
+  # Admob (Android only)
   google_mobile_ads: ^6.0.0
   app_tracking_transparency: ^2.0.6+1
   # Text to Speech

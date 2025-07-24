@@ -2,9 +2,6 @@
 /// 
 /// Contains all constants used throughout the application including app configuration,
 /// UI styling, phonics data, and utility functions.
-/// 
-/// Author: Nakajima Masao
-/// Version: 1.5.3
 
 import 'package:flutter/material.dart';
 
@@ -12,24 +9,20 @@ import 'package:flutter/material.dart';
 // APP CONFIGURATION
 // =============================================================================
 
-/// Application title displayed in the app bar and system
 const String myTitle = "Study Phonics";
-/// Custom font family used throughout the app
 const String myFont = "sfPro";
+const String testBannerUnitId = "ca-app-pub-3940256099942544/6300978111"; //Adaptive Banner
+
+
 
 // =============================================================================
 // UI SIZING CONSTANTS
 // =============================================================================
 
-/// Font size for the app bar title
 const double appBarFontSize = 28;
-/// Top margin for list items
 const double listTopMargin = 10;
-/// Font size for characters in the list
-const double listCharSize = 24;
-/// Margin between list items
+const double listCharSize = 24;/// Margin between list items
 const double listMargin = 3;
-/// Padding for list containers
 const double listPadding = 0;
 
 // =============================================================================

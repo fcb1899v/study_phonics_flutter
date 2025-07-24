@@ -4,6 +4,10 @@
         android:label="Study Phonics"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1585283309075901~9894151798"
+            />
         <activity
             android:name=".MainActivity"
             android:exported="true"

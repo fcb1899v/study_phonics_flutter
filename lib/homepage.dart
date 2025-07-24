@@ -1,3 +1,8 @@
+/// Study Phonics App - Home Page
+/// 
+/// Main phonics learning page that displays phonics sounds, words, and images.
+/// Manages the interactive phonics learning interface with TTS functionality.
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -81,6 +86,7 @@ class HomePage extends HookConsumerWidget {
               ]),
             ),
           )),
+          ///Operation
           Row(children: List.generate(9, (i) =>
             (i == 2 || i == 6) ? SizedBox(width: context.buttonMargin()):
             (i % 2 == 0) ? Spacer(): main.operationButton(
@@ -89,6 +95,7 @@ class HomePage extends HookConsumerWidget {
             ),
           )),
           Spacer(flex: 1),
+          ///Banner Ad
           (Platform.isAndroid) ? AdBannerWidget(): SizedBox(height: context.admobHeight()),
         ]),
       ),
