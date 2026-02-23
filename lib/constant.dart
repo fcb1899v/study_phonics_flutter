@@ -1,9 +1,8 @@
-/// Study Phonics App - Constants
-/// 
+import 'package:flutter/material.dart';
+
+/// Constants
 /// Contains all constants used throughout the application including app configuration,
 /// UI styling, phonics data, and utility functions.
-
-import 'package:flutter/material.dart';
 
 // =============================================================================
 // APP CONFIGURATION

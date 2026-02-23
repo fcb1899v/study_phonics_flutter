@@ -1,8 +1,3 @@
-/// Study Phonics App - Home Page
-/// 
-/// Main phonics learning page that displays phonics sounds, words, and images.
-/// Manages the interactive phonics learning interface with TTS functionality.
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,11 +7,12 @@ import 'admob_banner.dart';
 import 'constant.dart';
 import 'extension.dart';
 
+/// Home Page
 /// Main phonics learning page that displays phonics sounds, words, and images
 /// Manages the interactive phonics learning interface with TTS functionality
 class HomePage extends HookConsumerWidget {
   final int index;
-  HomePage({required this.index});
+  const HomePage({super.key, required this.index});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +27,7 @@ class HomePage extends HookConsumerWidget {
     var picture = char.phonicsPicture();
     var sound = char.phonicsWord().wordSound();
     // UI widget helper
-    final main = MainWidget(context);
+    final home = HomeWidget(context);
 
     // Initialize TTS and log initial state
     useEffect(() {
@@ -61,7 +57,7 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       ///AppBar
-      appBar: main.mainAppBar(),
+      appBar: home.mainAppBar(),
       ///Body
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: context.sideMargin()),
@@ -69,7 +65,7 @@ class HomePage extends HookConsumerWidget {
           Spacer(flex: 1),
           ///Char
           Row(children: List.generate((char.length == 1) ? 5: 3, (i) =>
-            (i % 2 == 0) ? Spacer(): main.charButton(char,
+            (i % 2 == 0) ? Spacer(): home.charButton(char,
               isUpperCase: i == 1,
               onTap: () => ttsManager.speakText(char.charSound()),
             ),
@@ -80,16 +76,16 @@ class HomePage extends HookConsumerWidget {
             GestureDetector(
               onTap: () => ttsManager.speakText(sound[(i - 1)~/2]),
               child: Column(children: [
-                main.wordWidget(word, i),
-                main.pictureImage(picture[(i - 1)~/2]),
-                main.audioButtonImage(),
+                home.wordWidget(word, i),
+                home.pictureImage(picture[(i - 1)~/2]),
+                home.audioButtonImage(),
               ]),
             ),
           )),
           ///Operation
           Row(children: List.generate(9, (i) =>
             (i == 2 || i == 6) ? SizedBox(width: context.buttonMargin()):
-            (i % 2 == 0) ? Spacer(): main.operationButton(
+            (i % 2 == 0) ? Spacer(): home.operationButton(
               icon: icons[(i - 1)~/2],
               onTap: () => operations((i - 1)~/2),
             ),
@@ -105,11 +101,11 @@ class HomePage extends HookConsumerWidget {
 
 /// Helper class for creating UI components with consistent styling
 /// Provides reusable widgets for the phonics learning interface
-class MainWidget {
+class HomeWidget {
 
   final BuildContext context;
 
-  MainWidget(this.context);
+  HomeWidget(this.context);
 
   /// Creates the main app bar with title and back button
   AppBar mainAppBar() => AppBar(
@@ -132,7 +128,7 @@ class MainWidget {
       color: whiteColor,
       shadows: [myShadow()],
     ),
-    onPressed: () => Navigator.pop(context, true),
+    onPressed: () => context.popPage(),
   );
 
   /// Creates interactive character button for phonics sound

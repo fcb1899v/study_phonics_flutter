@@ -1,19 +1,14 @@
-/// Study Phonics App - AdMob Banner Widget
-/// 
-/// Displays banner advertisements using Google AdMob SDK.
-/// Only works on Android platform, returns empty widget on iOS.
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'extension.dart';
-
 // Import AdMob only for Android
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// AdMob Banner Widget
-/// Displays banner advertisements with platform-specific handling
+/// Displays banner advertisements using Google AdMob SDK.
+/// Only works on Android platform, returns empty widget on iOS.
 class AdBannerWidget extends HookWidget {
   const AdBannerWidget({super.key});
 

@@ -1,31 +1,28 @@
-/// Study Phonics App - List Page
-/// 
-/// This page displays a grid of phonics sounds that users can tap to learn.
-/// It serves as the main navigation hub for the phonics learning app.
-/// 
-/// Features:
-/// - Grid layout of phonics sounds
-/// - Responsive design based on screen size
-/// - Navigation to individual phonics lessons
-/// - Custom styling with shadows and colors
-/// 
-
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'extension.dart';
 import 'constant.dart';
 import 'homepage.dart';
 
+/// List Page
 /// Main list page that displays all phonics sounds in a grid layout
 /// This is the entry point of the app where users can select which
 /// phonics sound they want to practice. The page uses a responsive
 /// grid layout that adapts to different screen sizes.
 class ListPage extends HookConsumerWidget {
-  const ListPage({Key? key}) : super(key: key);
+  const ListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final list = ListWidget();
+
+    // Initialized app
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) async => FlutterNativeSplash.remove());
+      return null;
+    }, []);
 
     return Scaffold(
       /// App Bar with title and styling
@@ -65,16 +62,10 @@ class ListPage extends HookConsumerWidget {
 }
 
 /// Helper class for list page components
-/// Contains reusable UI components like the app bar
-/// to keep the main widget clean and organized
 class ListWidget {
 
-  /// Creates the app bar with title and styling
-  /// Returns a custom AppBar with:
-  /// - App title with custom font and shadow
-  /// - Pink background color
-  /// - Centered title
-  listAppBar() => AppBar(
+  /// The app bar with title and styling
+  AppBar listAppBar() => AppBar(
     title: Text(myTitle, // App title from constants
       style: TextStyle(
         fontWeight: FontWeight.bold, // Bold title

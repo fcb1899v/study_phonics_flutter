@@ -7,29 +7,27 @@ plugins {
 }
 
 def kotlin_version = "2.2.0"
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
+
+static def parsePropertiesFile(f) {
+    def map = [:]
+    if (!f.exists()) return map
+    f.eachLine { line ->
+        line = line.trim()
+        if (line && !line.startsWith("#") && line.contains("=")) {
+            def eq = line.indexOf("=")
+            def key = line.substring(0, eq).trim()
+            def value = line.substring(eq + 1).trim()
+            map[key] = value
+        }
     }
+    return map
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
+def localProperties = parsePropertiesFile(rootProject.file("local.properties"))
+def flutterVersionCode = localProperties["flutter.versionCode"] ?: "1"
+def flutterVersionName = localProperties["flutter.versionName"] ?: "1.0"
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
+def keystoreProperties = parsePropertiesFile(rootProject.file("key.properties"))
 
 android {
 
@@ -57,7 +55,7 @@ android {
 
     defaultConfig {
         applicationId "com.nakajimamasao.studyphonics"
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -87,7 +85,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // ───────────────────── Firebase ─────────────────────
     implementation platform("com.google.firebase:firebase-bom:33.16.0")
-    implementation "com.google.firebase:firebase-analytics-ktx"
+    implementation "com.google.firebase:firebase-analytics-ktx:22.1.2"
 }
 
 allprojects {

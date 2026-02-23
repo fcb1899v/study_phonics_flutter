@@ -1,8 +1,3 @@
-/// Study Phonics App - Text-to-Speech Manager
-/// 
-/// Manages text-to-speech functionality for the phonics learning app.
-/// Handles voice selection, speech synthesis, and platform-specific configurations.
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -39,7 +34,7 @@ class TtsManager {
     final voices = await flutterTts.getVoices;
     // Filter for local female voices (iOS/macOS only)
     List<dynamic> localFemaleVoices = (Platform.isIOS || Platform.isMacOS) ? voices.where((voice) {
-      final isLocalMatch = voice['locale'].toString().contains(context.lang());
+      final isLocalMatch = voice['locale'].toString().contains(ttsLocale);
       final isFemale = voice['gender'].toString().contains('female');
       return isLocalMatch && isFemale;
     }).toList(): [];
@@ -95,8 +90,8 @@ class TtsManager {
     await flutterTts.awaitSpeakCompletion(true);
     await flutterTts.awaitSynthCompletion(true);
     // Set language and check availability
-    if (context.mounted) await flutterTts.setLanguage(context.lang());
-    if (context.mounted) await flutterTts.isLanguageAvailable(context.lang());
+    if (context.mounted) await flutterTts.setLanguage("en-US");
+    if (context.mounted) await flutterTts.isLanguageAvailable("en-US");
     // Set voice and speech parameters
     if (context.mounted) await setTtsVoice();
     await flutterTts.setVolume(1); // Maximum volume

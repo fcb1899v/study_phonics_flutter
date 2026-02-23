@@ -1,34 +1,20 @@
-/// Study Phonics App - Extensions
-/// 
-/// Provides extension methods for BuildContext and String classes.
-/// Includes responsive UI utilities, navigation helpers, and phonics functionality.
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';
 
+/// Extensions
+/// Provides extension methods for BuildContext and String classes.
+/// Includes responsive UI utilities, navigation helpers, and phonics functionality.
+
 /// Extension for BuildContext providing navigation and responsive UI utilities
 extension ContextExt on BuildContext {
 
-  /// Navigates with fade transition and removes previous routes
-  void pushFadeReplacement(Widget page) {
-    Navigator.pushAndRemoveUntil(this, PageRouteBuilder(
-      pageBuilder: (_, animation, __) => page,
-      transitionsBuilder: (_, animation, __, child) => FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
-      transitionDuration: const Duration(milliseconds: 500),
-    ),
-    (route) => false);
-  }
-  
+  // Navigation
   void popPage() => Navigator.pop(this);
-  double width() => MediaQuery.of(this).size.width;
-  double height() => MediaQuery.of(this).size.height;
-  String lang() => Localizations.localeOf(this).languageCode;
 
   // Responsive sizing methods based on screen dimensions
+  double width() => MediaQuery.of(this).size.width;
+  double height() => MediaQuery.of(this).size.height;
   double appBarHeight() => (width() < 600) ? width() * 0.15: 90;
   double sideMargin() => height() * 0.005;
   double picSize() => height() * 0.18;
@@ -42,8 +28,6 @@ extension ContextExt on BuildContext {
   double buttonIconSize() => height() * 0.03;
   double buttonHeight() => height() * 0.05;
   double buttonRadius() => height() * 0.03;
-
-  // AdMob banner sizing
   double admobHeight() => (height() < 600) ? 50: (height() < 1000) ? 50 + (height() - 600) / 8: 100;
   double admobWidth() => width();
 
