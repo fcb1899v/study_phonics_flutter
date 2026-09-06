@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -15,6 +14,10 @@ import 'constant.dart';
 /// Main Entry Point
 /// Main entry point of the application
 /// Initializes Flutter, Firebase, AdMob, and starts the app
+// No ATT call here. On iOS the UMP form shows Google's IDFA explainer and then
+// raises the system ATT prompt itself, so asking again from the app put a second
+// explainer in front of a user who had already answered. Removed in NEO first;
+// see 03_Developer/technical/2026-08-25_elevatorneo_att_gate_removal.md
 Future<void> main() async {
   // Ensure Flutter is initialized before platform-specific code
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +45,15 @@ Future<void> main() async {
   // Start the app with Riverpod provider scope
   runApp(const ProviderScope(child: MyApp()));
   // Initialize Google Mobile Ads for Android platform
+  // Android only: no ad is requested on iOS. homepage.dart shows a plain
+  // SizedBox there instead of AdBannerWidget, and initialize() is gated below,
+  // so nothing on iOS ever reaches the ads SDK.
+  //
+  // Info.plist still carries GADApplicationIdentifier and it names this app's
+  // own AdMob iOS app, which is registered and has a store id. The key cannot
+  // be dropped while the plugin is linked, and naming Google's sample app there
+  // would put another publisher's id in a shipping build for no gain. Setting
+  // it correctly requests no ads; the gates below decide that.
   if (Platform.isAndroid) MobileAds.instance.initialize();
 }
 
@@ -69,15 +81,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// Initialize App Tracking Transparency (ATT) plugin
-/// Requests tracking authorization on iOS/macOS platforms for personalized ads
-Future<void> initATTPlugin() async {
-  if (Platform.isIOS || Platform.isMacOS) {
-    // Check current tracking authorization status
-    final status = await AppTrackingTransparency.trackingAuthorizationStatus;
-    // Request authorization if not determined
-    if (status == TrackingStatus.notDetermined) {
-      await AppTrackingTransparency.requestTrackingAuthorization();
-    }
-  }
-}

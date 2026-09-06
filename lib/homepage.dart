@@ -135,7 +135,7 @@ class HomeWidget {
   /// @param char The phonics character to display
   /// @param isUpperCase Whether to display in uppercase
   /// @param onTap Callback function when button is tapped
-  charButton(String char, {
+  GestureDetector charButton(String char, {
     required bool isUpperCase,
     required void Function() onTap,
   }) => GestureDetector(
@@ -158,7 +158,7 @@ class HomeWidget {
   /// Creates word widget with highlighted phonics sound
   /// @param word List of word parts [prefix, sound, suffix]
   /// @param i Index for word selection
-  wordWidget(List<String> word, int i) => Container(
+  Container wordWidget(List<String> word, int i) => Container(
     alignment: Alignment.center,
     width: context.picSize(),
     margin: EdgeInsets.only(bottom: context.wordSpace()),
@@ -183,7 +183,7 @@ class HomeWidget {
 
   /// Creates image container for phonics word illustration
   /// @param picture Asset path for the image
-  pictureImage(String picture) => Container(
+  Container pictureImage(String picture) => Container(
     width: context.picSize(),
     height: context.picSize(),
     margin: EdgeInsets.only(bottom: context.wordSpace()),
@@ -191,7 +191,7 @@ class HomeWidget {
   );
 
   /// Creates audio button with play icon
-  audioButtonImage() => Container(
+  Container audioButtonImage() => Container(
     width: context.picSize(),
     height: context.buttonHeight(),
     margin: EdgeInsets.only(bottom: context.wordSpace()),
@@ -211,7 +211,7 @@ class HomeWidget {
   /// Creates operation button for navigation and list management
   /// @param icon Icon to display on the button
   /// @param onTap Callback function when button is tapped
-  operationButton({
+  GestureDetector operationButton({
     required IconData icon,
     required void Function() onTap,
   }) => GestureDetector(

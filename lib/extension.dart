@@ -42,7 +42,7 @@ extension StringExt on String {
     if (kDebugMode) print(this);
   }
 
-  String charSound() => (this.replaceAll("'", "").length == 1) ? this.replaceAll("'", ""): "";
+  String charSound() => (replaceAll("'", "").length == 1) ? replaceAll("'", ""): "";
 
   /// Returns phonics word combinations for teaching sounds
   /// Format: [prefix1, sound, suffix1, prefix2, sound, suffix2]
@@ -271,12 +271,12 @@ extension IntExt on int {
   /// Returns counter value based on navigation direction
   int getCounterValue(int i, int defaultValue) {
     final int counter = (i == 2) ? backNumber(): (i == 3) ? nextNumber(): defaultValue;
-    "Counter: ${counter}".debugPrint();
+    "Counter: $counter".debugPrint();
     return counter;
   }
 }
 
-/// Extension for List<String> providing phonics word processing
+/// Extension for `List<String>` providing phonics word processing
 extension ListStringExt on List<String> {
 
   /// Combines phonics word parts into complete words

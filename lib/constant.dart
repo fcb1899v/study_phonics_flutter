@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 const String myTitle = "Study Phonics";
 const String myFont = "sfPro";
-const String testBannerUnitId = "ca-app-pub-3940256099942544/6300978111"; //Adaptive Banner
+const String testBannerUnitId = "ca-app-pub-3940256099942544/9214589741"; // Adaptive banner demo unit
 
 
 
@@ -60,13 +60,13 @@ class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll('#', '');
     if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor; // Add alpha channel if missing
+      hexColor = 'FF$hexColor'; // Add alpha channel if missing
     }
     return int.parse(hexColor, radix: 16);
   }
   /// Creates a color from hex string
   /// Example: HexColor("#FF0000") or HexColor("FF0000")
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+  HexColor(String hexColor) : super(_getColorFromHex(hexColor));
 }
 
 // =============================================================================
@@ -98,3 +98,18 @@ List<IconData> icons = [
   Icons.arrow_back,       // Navigate back
   Icons.arrow_forward     // Navigate forward
 ];
+
+
+// --- AdMob demo ad units ---
+// Google publishes these and they are the same for every developer, so they are
+// constants here rather than .env entries: they are not secret, and keeping them
+// in source means a missing .env key can no longer break a debug build. The
+// .env key this used to read was removed on 2026-09-02, which left every debug
+// build throwing from dotenv.get.
+// Production unit IDs stay in .env, because those are ours.
+// Only the Android banner is listed: homepage.dart shows AdBannerWidget on
+// Android alone, so no other unit is ever requested by this app.
+// https://developers.google.com/admob/android/test-ads  (checked 2026-09-02)
+// Adaptive banners have their own demo unit. The fixed size one (6300978111)
+// only serves 320x50, which makes every adaptive size look like 320x50
+const String androidBannerTestId = "ca-app-pub-3940256099942544/9214589741";

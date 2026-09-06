@@ -24,6 +24,11 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<!-- This app's own AdMob iOS app. No ad is requested on iOS (main.dart
+	     gates initialize() and homepage.dart the widget), but the key itself is
+	     required while the plugin is linked, and Google's sample id would name
+	     another publisher in a shipping build. Note: PlistBuddy drops this
+	     comment if it rewrites the file. -->
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-1585283309075901~9511008417</string>
 	<key>LSRequiresIPhoneOS</key>
