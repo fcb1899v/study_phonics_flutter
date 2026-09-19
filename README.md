@@ -10,51 +10,54 @@
 
 ## 📱 Application Overview
 
-Study Phonics is a Flutter-based educational app for Android & iOS that helps users learn phonics through interactive exercises.
-It provides an engaging learning experience through text-to-speech functionality, visual aids, and comprehensive phonics coverage.
+Study Phonics is a Flutter app for Android & iOS that teaches English phonics.
+Each sound opens a page with example words, their images, and text-to-speech playback.
 
 ### 🎯 Key Features
 
-- **Comprehensive Phonics Coverage**: 60 phonics sounds including single letters, blends, and special sounds
-- **Text-to-Speech Integration**: High-quality voice pronunciation for each sound
-- **Cross-platform Support**: Android & iOS compatibility
-- **Interactive Learning**: Tap to hear sounds and practice pronunciation
-- **Visual Learning Aids**: 169 word images with clear typography
-- **Firebase Analytics**: Track learning progress and app usage
-- **AdMob Integration**: Banner ads for monetization
-- **Responsive Design**: Adapts to different screen sizes
-- **App Tracking Transparency**: iOS privacy compliance
+- **Phonics Coverage**: 77 sounds in `allPhonics` (`lib/constant.dart`), covering single letters, vowel combinations, blends, and silent letter patterns
+- **Text-to-Speech**: Pronunciation for every sound and example word through `flutter_tts`
+- **Cross-platform Support**: Android & iOS
+- **Interactive Learning**: Tap a sound or word to hear it
+- **Visual Learning Aids**: two example images per sound; `lib/extension.dart` references 156 of the 169 files in `assets/image/`
+- **Firebase Analytics**: Android only, gated by `Platform.isAndroid` in `lib/main.dart`
+- **AdMob Banner**: Android only, with the UMP consent flow in `lib/admob_banner.dart`
+- **Responsive Design**: Grid and type sizes derived from the screen size
 
 ## 🚀 Technology Stack
 
 ### Frameworks & Libraries
-- **Flutter**: 3.3.0+
-- **Dart**: 2.18.0+
-- **Firebase**: Analytics
-- **Google Mobile Ads**: Banner advertisement display
+- **Flutter**: 3.47.0+
+- **Dart**: 3.13.0+
+- **Firebase**: `firebase_core` and `firebase_analytics`, the only Firebase packages in `pubspec.yaml`, initialized on Android only
+- **Google Mobile Ads**: Banner ads and UMP consent (Android only)
 
 ### Core Features
-- **Text-to-Speech**: flutter_tts
+- **Text-to-Speech**: `flutter_tts`, vendored at `packages/flutter_tts`
 - **State Management**: hooks_riverpod, flutter_hooks
 - **Environment Variables**: flutter_dotenv
-- **App Tracking Transparency**: app_tracking_transparency
 - **App Icons**: flutter_launcher_icons
 - **Splash Screen**: flutter_native_splash
 
+### The flutter_tts fork is local on purpose
+
+`pubspec.yaml` points `flutter_tts` at `packages/flutter_tts`, not at pub.dev.
+The published 4.2.5 has no Swift Package Manager manifest, so depending on it would put CocoaPods back into the iOS build.
+The fork adds the SPM manifests and branches `android/build.gradle` on `android.builtInKotlin` for AGP 9; the Dart sources are unchanged.
+
 ## 📋 Prerequisites
 
-- Flutter 3.47.0+ (required by Android Gradle Plugin 9: earlier versions
-  force the Kotlin Gradle Plugin onto modules that AGP 9 compiles itself)
+- Flutter 3.47.0+ (required by Android Gradle Plugin 9: earlier versions force the Kotlin Gradle Plugin onto modules that AGP 9 compiles itself)
 - Dart 3.13.0+
 - Android Studio / Xcode
-- Firebase (Analytics)
+- Firebase project with Analytics, for Android builds
 
 ## 🛠️ Setup
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/study_phonics.git
-cd study_phonics
+git clone https://github.com/fcb1899v/study_phonics_flutter.git
+cd study_phonics_flutter
 ```
 
 ### 2. Install Dependencies
@@ -64,37 +67,32 @@ flutter pub get
 
 ### 3. Configuration Files Setup
 
-**Environment variables.** Copy `assets/.env_example` to `assets/.env` and fill
-in the values. The template lists every key with what it is for, and is the one
-place that list is maintained. `pubspec.yaml` declares `assets/.env`, so the
-file has to exist or the build fails. Debug builds use Google's demo ad units
-and need no real ids, and the demo unit for an inline adaptive request is not
-the same id as the fixed-size one.
+**Environment variables.** Copy `assets/.env_example` to `assets/.env` and fill in the values.
+The template lists every key with what it is for, and is the one place that list is maintained.
+`pubspec.yaml` declares `assets/.env`, so the file has to exist or the build fails.
+Debug builds use Google's demo ad units and need no real ids, and the demo unit for an inline adaptive request is not the same id as the fixed-size one.
 
-**Android signing, release only.** Copy `android/key.properties.example` to
-`android/key.properties` and fill it in. Nothing in it ships inside the app, and
-the two passwords are real secrets: together with the keystore they let anyone
-publish an update Play accepts as coming from you. Keep the keystore outside the
-repository and back both up. A release built without this file falls back to the
-debug signing config, which produces an artifact Play rejects.
+**Android signing, release only.** Copy `android/key.properties.example` to `android/key.properties` and fill it in.
+Nothing in it ships inside the app, and the two passwords are real secrets: together with the keystore they let anyone publish an update Play accepts as coming from you.
+Keep the keystore outside the repository and back both up.
+`android/app/build.gradle` defines the release signing config, and attaches it to the release build type, only when all four values are present.
 
 ### 4. Firebase Configuration
-1. Create a Firebase project
-2. Place `google-services.json` (Android) in `android/app/`
-3. Place `GoogleService-Info.plist` (iOS) in `ios/Runner/`
-4. These files are tracked here. The Gradle plugin fails the Android build
-   without the json, and the Xcode project lists the plist in its Resources
-   phase, so excluding them only broke fresh clones. They carry the same
-   identifiers as `lib/firebase_options.dart`, which ship inside the app.
-   Real secrets stay out: the keystore and the environment file
+
+Firebase is initialized on Android only: `lib/main.dart` initializes it inside `if (Platform.isAndroid)`, and `ios/Runner.xcodeproj/project.pbxproj` contains no reference to a GoogleService file.
+
+1. Create a Firebase project and add an Android app with the application id `com.nakajimamasao.studyphonics`.
+2. Download `google-services.json` from Project settings > Your apps and place it in `android/app/`.
+3. Run `flutterfire configure` to generate `lib/firebase_options.dart`, which `lib/main.dart` imports.
+4. Both files are git-ignored, so a fresh clone has to fetch and regenerate them before the Android build will run.
 
 ### 5. Run the Application
 ```bash
 # Android
-flutter run
+flutter run -d <android-device-id>
 
 # iOS (Swift Package Manager: there is no Podfile to install)
-flutter run
+flutter run -d <ios-device-id>
 ```
 
 ## 🎮 Application Structure
@@ -102,67 +100,38 @@ flutter run
 ```
 lib/
 ├── main.dart                    # Application entry point
-├── main_page.dart               # Main phonics learning page
-├── list_page.dart               # Phonics selection grid
+├── list_page.dart               # Phonics selection grid, the first screen
+├── homepage.dart                # Phonics learning page
 ├── tts_manager.dart             # Text-to-speech management
-├── admob_banner.dart            # Banner advertisement management
-├── common_widget.dart           # Common widgets
-├── constant.dart                # Constant definitions
-├── extension.dart               # Extension functions
-└── firebase_options.dart        # Firebase configuration
+├── admob_banner.dart            # Banner ad and UMP consent, Android only
+├── constant.dart                # Constant definitions and the phonics list
+├── extension.dart               # Extension functions, word and image data
+└── firebase_options.dart        # Generated by flutterfire configure, git-ignored
 
 assets/
-├── image/                       # Phonics learning images
-│   ├── acorn.png               # Word images for each sound
-│   ├── apple.png
-│   ├── banana.png
-│   └── ...                     # 169 word images total
-├── fonts/                       # Font files
-│   └── SF-Pro.ttf              # Custom font
-├── icon/                        # App icons
-│   ├── icon.png
-│   ├── appIcon.png
-│   └── splash.png
-└── .env                         # Environment variables
+├── image/                       # 169 PNG files, 156 of them referenced by extension.dart
+├── fonts/                       # SF-Pro.ttf
+├── icon/                        # icon.png, appIcon.png, splash.png
+├── .env_example                 # Environment variable template
+└── .env                         # Environment variables, git-ignored
 ```
-
-## 🎨 Phonics Content
-
-### Single Letter Sounds (30 sounds)
-- **a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z**
-- **a', c', g', i', s'** (Alternative pronunciations)
-
-### Vowel Combinations & Special Sounds (30 sounds)
-- **ai, ay, ea, au, aw, oa, oo, ou, ow, ue, ui, ew, oy**
-- **er, ir, or, ur, ear, eer, air, our**
-- **ie, igh, ey, ēē, ēā, īē, ōō, ōū, ōw**
-- **Silent letter patterns**: _a_e, _e_e, _i_e, _u_e
-- **Special sounds**: -y, all, ph, ch, sh, th, th', wh, ck, ng, lly
 
 ## 📱 Supported Platforms
 
-- **Android**: API 23+ (Android 6.0+)
-- **iOS**: iOS 14.0+
-- **Web**: Coming soon
+- **Android**: API 24+ (`flutter.minSdkVersion`), compiled and targeted against SDK 37
+- **iOS**: iOS 15.0+ (`IPHONEOS_DEPLOYMENT_TARGET` on the Runner target)
 
 ## 🔧 Development
 
 ### Code Analysis
 ```bash
-flutter analyze
+flutter analyze   # expected: No issues found!
 ```
 
 ### Run Tests
 
-There are none. The `flutter create` counter test was removed on 2026-09-02
-because it asserted on a widget this app does not have and could only ever fail,
-which made a red `flutter test` indistinguishable from a real failure.
-
+This repository has no `test/` directory, so `flutter test` has nothing to run.
 `flutter analyze` is the check that runs clean and is expected to stay that way.
-
-```bash
-flutter analyze   # expected: No issues found!
-```
 
 ### Build
 ```bash
@@ -178,99 +147,47 @@ flutter build ios
 
 ### Generate App Icons
 ```bash
-flutter pub run flutter_launcher_icons:main
+dart run flutter_launcher_icons
 ```
 
 ### Generate Splash Screen
 ```bash
-flutter pub run flutter_native_splash:create
+dart run flutter_native_splash:create
 ```
-
-## 🎯 Learning Features
-
-### Interactive Learning
-- **Tap to Hear**: Tap any phonics sound to hear pronunciation
-- **Visual Aids**: Each sound has associated word images (169 total)
-- **Progress Tracking**: Firebase Analytics tracks learning progress
-
-### Text-to-Speech Features
-- **High-Quality Voices**: Platform-optimized voice selection
-- **Clear Pronunciation**: Optimized speech rate for learning
-- **Multi-language Support**: Ready for international expansion
-
-### User Experience
-- **Responsive Design**: Adapts to different screen sizes
-- **Intuitive Navigation**: Simple grid-based selection
-- **Accessibility**: Large text and clear contrast
-
-## 🔒 Security
-
-This project includes security measures to protect sensitive information:
-- Environment variables for API keys
-- Firebase configuration files are excluded from version control
-- Ad unit IDs are stored in environment files
-- Keystore files are properly excluded
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is not open source.
+The source is published so that it can be read, and all rights are reserved.
+See [LICENSE](LICENSE) for what that permits.
+Third-party components keep their own licenses, listed below.
 
 ## 🤝 Contributing
 
-Pull requests and issue reports are welcome. Please ensure your code follows the existing style and includes appropriate tests.
+Issue reports are welcome.
+Pull requests are not accepted, because the code is not licensed for redistribution.
 
 ## 📞 Support
 
 If you have any problems or questions, please create an issue on GitHub.
 
-## 🚀 Getting Started
-
-For new developers:
-1. Follow the setup instructions above
-2. Check the application structure
-3. Review the phonics content organization
-4. Start with the main.dart file to understand the app flow
-5. Explore the tts_manager.dart for text-to-speech functionality
-
----
-
-<div align="center">
-  <strong>Study Phonics</strong> - Making phonics learning fun and effective!
-</div>
-
 ## Licenses & Credits
 
-This app uses the following open-source libraries:
+This app uses the following third-party components:
 
 - Flutter (BSD 3-Clause License)
-- firebase_core, firebase_analytics (Apache License 2.0)
+- firebase_core, firebase_analytics (BSD 3-Clause License)
 - google_mobile_ads (Apache License 2.0)
+- Google Mobile Ads Android SDK (Android Software Development Kit License): `play-services-ads`, pulled in by google_mobile_ads
+- Google Mobile Ads iOS SDK (proprietary Google binary; its CocoaPods spec declares only a Google copyright notice, with no open-source license): `Google-Mobile-Ads-SDK`, pulled in by google_mobile_ads
+- User Messaging Platform, the consent SDK (Android Software Development Kit License): `com.google.android.ump:user-messaging-platform`, pulled in by google_mobile_ads
+- User Messaging Platform on iOS (proprietary Google binary, declared the same way as the iOS ads SDK): `GoogleUserMessagingPlatform`, pulled in by `Google-Mobile-Ads-SDK`
 - flutter_dotenv (MIT License)
-- flutter_tts (BSD 3-Clause License)
+- flutter_tts (MIT License), vendored at `packages/flutter_tts`
 - hooks_riverpod, flutter_hooks (MIT License)
 - cupertino_icons (MIT License)
 - flutter_launcher_icons (MIT License)
 - flutter_native_splash (MIT License)
-- app_tracking_transparency (MIT License)
 
 For details of each license, please refer to [pub.dev](https://pub.dev/) or the LICENSE file in each repository.
 
-## 📊 Analytics & Privacy
-
-- **Firebase Analytics**: Tracks app usage and learning progress
-- **App Tracking Transparency**: iOS privacy compliance
-- **AdMob**: Banner ads for monetization
-
-## 🎓 Educational Value
-
-Study Phonics is designed to help:
-- **Early Readers**: Learn basic phonics sounds
-- **ESL Students**: Practice English pronunciation
-- **Special Education**: Visual and auditory learning support
-- **Parents & Teachers**: Educational tool for phonics instruction
-
----
-
-<div align="center">
-  <strong>Study Phonics</strong> - Empowering learners through interactive phonics education!
-</div>
