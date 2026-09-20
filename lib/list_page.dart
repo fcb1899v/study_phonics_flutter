@@ -6,11 +6,8 @@ import 'extension.dart';
 import 'constant.dart';
 import 'homepage.dart';
 
-/// List Page
-/// Main list page that displays all phonics sounds in a grid layout
-/// This is the entry point of the app where users can select which
-/// phonics sound they want to practice. The page uses a responsive
-/// grid layout that adapts to different screen sizes.
+/// List Page: app entry point showing all phonics sounds in a responsive grid
+/// so the user can pick one to practice.
 class ListPage extends HookConsumerWidget {
   const ListPage({super.key});
 

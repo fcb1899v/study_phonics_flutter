@@ -7,9 +7,8 @@ import 'admob_banner.dart';
 import 'constant.dart';
 import 'extension.dart';
 
-/// Home Page
-/// Main phonics learning page that displays phonics sounds, words, and images
-/// Manages the interactive phonics learning interface with TTS functionality
+/// Home Page: interactive phonics learning page showing sounds, words and images
+/// with TTS playback.
 class HomePage extends HookConsumerWidget {
   final int index;
   const HomePage({super.key, required this.index});
@@ -131,10 +130,7 @@ class HomeWidget {
     onPressed: () => context.popPage(),
   );
 
-  /// Creates interactive character button for phonics sound
-  /// @param char The phonics character to display
-  /// @param isUpperCase Whether to display in uppercase
-  /// @param onTap Callback function when button is tapped
+  /// Interactive character button for a phonics sound, upper or lower case.
   GestureDetector charButton(String char, {
     required bool isUpperCase,
     required void Function() onTap,
@@ -155,9 +151,7 @@ class HomeWidget {
     )
   );
 
-  /// Creates word widget with highlighted phonics sound
-  /// @param word List of word parts [prefix, sound, suffix]
-  /// @param i Index for word selection
+  /// Word widget with the phonics sound highlighted; [word] is [prefix, sound, suffix].
   Container wordWidget(List<String> word, int i) => Container(
     alignment: Alignment.center,
     width: context.picSize(),
@@ -208,9 +202,7 @@ class HomeWidget {
     ),
   );
 
-  /// Creates operation button for navigation and list management
-  /// @param icon Icon to display on the button
-  /// @param onTap Callback function when button is tapped
+  /// Operation button for navigation and list management.
   GestureDetector operationButton({
     required IconData icon,
     required void Function() onTap,

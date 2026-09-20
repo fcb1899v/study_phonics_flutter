@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 
-/// Constants
-/// Contains all constants used throughout the application including app configuration,
-/// UI styling, phonics data, and utility functions.
+/// Constants used throughout the app: configuration, UI styling, phonics data
+/// and utility functions.
 
-// =============================================================================
-// APP CONFIGURATION
-// =============================================================================
+// ===== APP CONFIGURATION =====
 
 const String myTitle = "Study Phonics";
 const String myFont = "sfPro";
-const String testBannerUnitId = "ca-app-pub-3940256099942544/9214589741"; // Adaptive banner demo unit
 
 
 
-// =============================================================================
-// UI SIZING CONSTANTS
-// =============================================================================
+// ===== UI SIZING CONSTANTS =====
 
 const double appBarFontSize = 28;
 const double listTopMargin = 10;
@@ -24,13 +18,10 @@ const double listCharSize = 24;/// Margin between list items
 const double listMargin = 3;
 const double listPadding = 0;
 
-// =============================================================================
-// PHONICS DATA
-// =============================================================================
+// ===== PHONICS DATA =====
 
-/// Complete list of phonics sounds taught in the app
-/// Includes single letter sounds, vowel combinations, consonant blends,
-/// special sounds, and silent letter patterns
+/// All phonics sounds taught in the app: single letters, vowel combinations,
+/// consonant blends, special sounds and silent letter patterns
 const List<String> allPhonics = [
   // Single letter sounds
   "a", "a'", "b", "c", "c'", "d", "e", "f", "g", "g'", "h", "i", "i'", "j", "k",
@@ -42,9 +33,7 @@ const List<String> allPhonics = [
   "oa", "ōw", "all", "ph", "ch", "sh", "th", "th'", "wh", "ck", "ng", "lly"
 ];
 
-// =============================================================================
-// COLOR CONSTANTS
-// =============================================================================
+// ===== COLOR CONSTANTS =====
 
 const Color whiteColor = Colors.white;
 const Color blackColor = Colors.black;
@@ -69,9 +58,7 @@ class HexColor extends Color {
   HexColor(String hexColor) : super(_getColorFromHex(hexColor));
 }
 
-// =============================================================================
-// UI STYLING
-// =============================================================================
+// ===== UI STYLING =====
 
 /// Standard shadow for cards and elevated elements
 /// Creates a subtle drop shadow with grey color, 2px spread, 4px blur, and 2px offset
@@ -82,16 +69,9 @@ BoxShadow myShadow() => BoxShadow(
   offset: Offset(2, 2), // Shadow offset from the element
 );
 
-// =============================================================================
-// NAVIGATION ICONS
-// =============================================================================
+// ===== NAVIGATION ICONS =====
 
-/// Navigation icons used in the app
-/// Index mapping:
-/// - 0: Reset button (keyboard_return icon)
-/// - 1: Shuffle button (shuffle icon)
-/// - 2: Back button (arrow_back icon)
-/// - 3: Next button (arrow_forward icon)
+/// Navigation icons, by index: 0 reset, 1 shuffle, 2 back, 3 next
 List<IconData> icons = [
   Icons.keyboard_return,  // Reset functionality
   Icons.shuffle,          // Shuffle/reorder items
@@ -100,16 +80,7 @@ List<IconData> icons = [
 ];
 
 
-// --- AdMob demo ad units ---
-// Google publishes these and they are the same for every developer, so they are
-// constants here rather than .env entries: they are not secret, and keeping them
-// in source means a missing .env key can no longer break a debug build. The
-// .env key this used to read was removed on 2026-09-02, which left every debug
-// build throwing from dotenv.get.
-// Production unit IDs stay in .env, because those are ours.
-// Only the Android banner is listed: homepage.dart shows AdBannerWidget on
-// Android alone, so no other unit is ever requested by this app.
-// https://developers.google.com/admob/android/test-ads  (checked 2026-09-02)
-// Adaptive banners have their own demo unit. The fixed size one (6300978111)
-// only serves 320x50, which makes every adaptive size look like 320x50
+// --- AdMob demo ad units --- Google's published constants, kept in source so a
+// missing .env key cannot break debug builds. Use the adaptive unit; fixed one is 320x50.
+// https://developers.google.com/admob/android/test-ads (checked 2026-09-02)
 const String androidBannerTestId = "ca-app-pub-3940256099942544/9214589741";

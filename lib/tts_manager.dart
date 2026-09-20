@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'extension.dart';
 
-/// Text-to-Speech Manager
-/// Handles all TTS operations including voice selection, speech synthesis,
-/// and platform-specific configurations for iOS and Android.
+/// Text-to-Speech Manager: voice selection, speech synthesis and
+/// platform-specific configuration for iOS and Android.
 class TtsManager {
   final BuildContext context;
   TtsManager({required this.context});
@@ -13,9 +12,7 @@ class TtsManager {
   /// FlutterTts instance for speech synthesis
   final FlutterTts flutterTts = FlutterTts();
 
-  // =============================================================================
-  // VOICE CONFIGURATION
-  // =============================================================================
+  // ===== VOICE CONFIGURATION =====
 
   /// Default TTS locale for English (US)
   static const String ttsLocale = "en-US";
@@ -26,9 +23,8 @@ class TtsManager {
   /// Platform-specific default voice name
   String defaultVoiceName = (Platform.isIOS || Platform.isMacOS) ? iOSVoiceName: androidVoiceName;
 
-  /// Sets the TTS voice based on platform and available voices
-  /// Gets available voices, filters for local female voices (iOS/macOS only),
-  /// and selects the best available voice or falls back to default
+  /// Sets the TTS voice: prefers a local female voice (iOS/macOS only),
+  /// otherwise falls back to the default
   Future<void> setTtsVoice() async {
     // Get all available voices on the device
     final voices = await flutterTts.getVoices;
@@ -52,9 +48,7 @@ class TtsManager {
     }
   }
 
-  /// Speaks the provided text using TTS
-  /// Stops any current speech before starting new speech to prevent overlap
-  /// [text] - The text to be spoken
+  /// Speaks [text], stopping any current speech first to prevent overlap
   Future<void> speakText(String text) async {
     await flutterTts.stop(); // Stop any current speech
     await flutterTts.speak(text); // Start speaking the new text
@@ -68,9 +62,8 @@ class TtsManager {
     "Stop TTS".debugPrint();
   }
 
-  /// Initializes TTS with platform-specific configurations
-  /// Sets up shared instance, iOS audio session, speech completion handling,
-  /// language and voice settings, volume and speech rate
+  /// Initializes TTS: shared instance, iOS audio session, completion handling,
+  /// language, voice, volume and speech rate
   Future<void> initTts() async {
     // Enable shared instance for better performance
     await flutterTts.setSharedInstance(true);

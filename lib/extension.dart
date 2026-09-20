@@ -2,9 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';
 
-/// Extensions
-/// Provides extension methods for BuildContext and String classes.
-/// Includes responsive UI utilities, navigation helpers, and phonics functionality.
+/// Extensions on BuildContext and String: responsive sizing, navigation helpers
+/// and phonics functionality.
 
 /// Extension for BuildContext providing navigation and responsive UI utilities
 extension ContextExt on BuildContext {
