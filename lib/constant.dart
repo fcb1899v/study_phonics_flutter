@@ -83,3 +83,8 @@ List<IconData> icons = [
 // Google's published demo ad units, kept in source so a missing .env key cannot break debug builds.
 // Adaptive unit, not the fixed 320x50 one (https://developers.google.com/admob/android/test-ads, checked 2026-09-02).
 const String androidBannerTestId = "ca-app-pub-3940256099942544/9214589741";
+
+/// Banner retry: capped attempts with exponential backoff.
+const int bannerMaxRetry = 5;
+const int bannerRetryBaseSec = 30;
+const int bannerRetryMaxSec = 300;
