@@ -2,37 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'constant.dart';
 
+part 'size_extension.dart';
 /// Extensions on BuildContext and String: responsive sizing, navigation helpers
 /// and phonics functionality.
 
 /// Extension for BuildContext providing navigation and responsive UI utilities
 extension ContextExt on BuildContext {
-
   // Navigation
   void popPage() => Navigator.pop(this);
-
-  // Responsive sizing methods based on screen dimensions
-  double width() => MediaQuery.of(this).size.width;
-  double height() => MediaQuery.of(this).size.height;
-  double appBarHeight() => (width() < 600) ? width() * 0.15: 90;
-  double sideMargin() => height() * 0.005;
-  double picSize() => height() * 0.18;
-  double charWidth(String char) => picSize() * ((char.length == 1) ? 1: 2);
-  double charHeight() => height() * 0.2;
-  double charSize() => height() * 0.15;
-  double wordSize() => height() * 0.025;
-  double wordSpace() => height() * 0.04;
-  double buttonWidth() => height() * 0.08;
-  double buttonMargin() => height() * 0.02;
-  double buttonIconSize() => height() * 0.03;
-  double buttonHeight() => height() * 0.05;
-  double buttonRadius() => height() * 0.03;
-  double admobHeight() => (height() < 600) ? 50: (height() < 1000) ? 50 + (height() - 600) / 8: 100;
-  double admobWidth() => width();
-
-  // Grid layout for phonics list
-  int listRowNumber() => width() ~/ 100 + 1;
 }
+
 
 /// Extension for String providing phonics functionality
 extension StringExt on String {
