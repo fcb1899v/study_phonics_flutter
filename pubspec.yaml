@@ -69,6 +69,8 @@ flutter_native_splash:
     icon_background_color: "#03a9f4"
 
 flutter:
+  config:
+    enable-swift-package-manager: true
   uses-material-design: true
   assets:
     - assets/image/
